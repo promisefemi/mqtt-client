@@ -1,12 +1,7 @@
 package topics
 
-type Topic string
-
 const (
-	HomeLight      Topic = "home/light"
-	HomeThermostat Topic = "home/thermostat"
+	HomeLight        = "home/light"
+	HomeThermostat   = "home/thermostat"
+	HomeBedroomLight = "home/bedroom/light"
 )
-
-func (t Topic) String() string {
-	return t.String()
-}

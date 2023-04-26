@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"mqtt-client/setup"
-	"time"
+	"mqtt-client/subscribers"
 )
 
 func main() {
@@ -12,18 +12,16 @@ func main() {
 		panic(err)
 	}
 
-	topic := "home/light"
-	token = client.Subscribe(topic, 1, nil)
-	token.Wait()
-	fmt.Printf("Subscribed to %s \n", topic)
+	topicSubscribers := subscribers.RegisterSubscribers(client)
 
-	num := 10
-	for i := 0; i <= num; i++ {
-		text := fmt.Sprintf("light %d", i)
-		token = client.Publish(topic, 0, false, text)
+	for _, sub := range topicSubscribers {
+		token := client.Subscribe(sub.GetTopic(), sub.GetQoS(), sub.Handler)
 		token.Wait()
-		time.Sleep(time.Second)
+		fmt.Printf("Subscribed to %s \n", sub.GetTopic())
 	}
+
+	//token := client.Subscribe(topics.HomeLight, 1, nil)
+	//token.Wait()
 
 	fmt.Println("app is running")
 	<-make(chan bool)
