@@ -2,7 +2,7 @@ package subscribers
 
 import (
 	"fmt"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/eclipse/paho.golang/paho"
 	"mqtt-client/topics"
 )
 
@@ -20,6 +20,6 @@ func (h HomeBedroomLightSubscriber) GetQoS() byte {
 	return 1
 }
 
-func (h HomeBedroomLightSubscriber) Handler(client mqtt.Client, message mqtt.Message) {
-	fmt.Printf("Message: %s -- topic: %s\n", message.Payload(), message.Topic())
+func (h HomeBedroomLightSubscriber) Handler(message *paho.Publish) {
+	fmt.Printf("Message: %s -- topic: %s\n", message.Payload, message.Topic)
 }

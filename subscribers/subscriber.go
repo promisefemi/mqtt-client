@@ -1,23 +1,26 @@
 package subscribers
 
-import mqtt "github.com/eclipse/paho.mqtt.golang"
+import (
+	"github.com/eclipse/paho.golang/paho"
+)
 
 type ISubscriber interface {
 	GetTopic() string
 	GetQoS() byte
-	Handler(client mqtt.Client, message mqtt.Message)
+	Handler(message *paho.Publish)
 }
 
 type SystemSubscriber struct {
 	subscribers []ISubscriber
 }
 
-func RegisterSubscribers(client mqtt.Client) []ISubscriber {
+func RegisterSubscribers() []ISubscriber {
 	allSubscribers := NewSystemSubscriber()
-
 	allSubscribers.AddSubscriber(NewHomeLightSubscriber())
 	allSubscribers.AddSubscriber(NewHomeThermostatSubscriber())
 	allSubscribers.AddSubscriber(NewHomeBedroomLightSubscriber())
+	allSubscribers.AddSubscriber(NewSharedClientTwoHomeLightSubscriber())
+	allSubscribers.AddSubscriber(NewSharedHomeLightSubscriber())
 
 	return allSubscribers.ListSubscribers()
 }
